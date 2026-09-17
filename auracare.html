@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>मेरा साथ निभाना - AuraCare Pro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="initApp()">
+
+    <div class="container" id="main-container">
+        <!-- टॉप कंट्रोल्स: A+, A-, नाईट मोड -->
+        <div class="top-controls">
+            <div>
+                <button onclick="changeFontSize(2)">A+</button>
+                <button onclick="changeFontSize(-2)">A-</button>
+            </div>
+            <div>
+                <button onclick="toggleDarkMode()" style="background-color: #555;">🌙 नाईट मोड</button>
+            </div>
+        </div>
+
+        <h2>मेरा साथ निभाना (AuraCare Pro)</h2>
+        <p>बुजुर्गों के लिए संपूर्ण स्मार्ट डिजिटल साथी</p>
+        <hr>
+
+        <!-- आपातकालीन संपर्क -->
+        <div class="section-box alert-box">
+            <h3 style="color: #e74c3c;">📇 आपातकालीन संपर्क (Direct Call)</h3>
+            <button onclick="callContact('9876543210')" style="background-color: #27ae60;">📞 बेटा/बेटी को कॉल करें</button>
+            <button onclick="callContact('108')" style="background-color: #c0392b;">🚑 एम्बुलेंस (108)</button>
+            <button onclick="callContact('102')" style="background-color: #e67e22;">🏥 डॉक्टर को कॉल करें</button>
+        </div>
+
+        <!-- लाइव जीपीएस लोकेशन -->
+        <div class="section-box">
+            <h3>📍 लाइव जीपीएस लोकेशन शेयरर</h3>
+            <button onclick="shareLiveLocation()" style="background-color: #2980b9;">🛰️ व्हाट्सएप पर लाइव लोकेशन भेजें</button>
+            <p id="live-loc-status"></p>
+        </div>
+
+        <!-- AI वॉयस साथी -->
+        <div class="section-box">
+            <h3>🤖 AI वॉयस साथी & बोलकर खोजें</h3>
+            <button onclick="startListening()" style="background-color: #2980b9;">🎤 बोलकर पूछें (Voice Search)</button>
+            <div class="chat-box" id="chat-history">
+                <div><b>AuraCare:</b> राम-राम जी! बताइए आज मैं आपकी क्या मदद करूँ?</div>
+            </div>
+            <input type="text" id="ai-input" placeholder="या यहाँ लिखकर पूछें...">
+            <button onclick="sendTextToAi()" style="background-color: #27ae60;">भेजें</button>
+        </div>
+
+        <!-- दवाइयों का स्मार्ट रिमाइंडर -->
+        <div class="section-box">
+            <h3>💊 दवाइयों का स्मार्ट रिमाइंडर</h3>
+            <input type="text" id="med-name" placeholder="दवा का नाम">
+            <input type="time" id="med-time">
+            <button onclick="addMedicine()">रिमाइंडर सेट करें</button>
+            <div id="med-list"></div>
+            <button onclick="reorderMeds()" style="background-color: #e67e22; margin-top:10px;">🛒 केमिस्ट को दवा री-ऑर्डर करें</button>
+        </div>
+
+        <!-- हेल्थ वाइटल्स ट्रैकर -->
+        <div class="section-box">
+            <h3>🩺 हेल्थ वाइटल्स ट्रैकर (BP & शुगर)</h3>
+            <input type="text" id="bp-val" placeholder="ब्लड प्रेशर (जैसे: 120/80)">
+            <input type="text" id="sugar-val" placeholder="शुगर लेवल (जैसे: 140)">
+            <button onclick="saveVitals()" style="background-color: #16a085;">वाइटल्स सेव करें</button>
+            <p id="vitals-display"></p>
+        </div>
+
+        <!-- डॉक्टर अपॉइंटमेंट -->
+        <div class="section-box">
+            <h3>📅 डॉक्टर अपॉइंटमेंट मैनेजर</h3>
+            <input type="text" id="doc-name" placeholder="डॉक्टर का नाम व अस्पताल">
+            <input type="datetime-local" id="doc-time">
+            <button onclick="addAppointment()">अपॉइंटमेंट सेव करें</button>
+            <div id="doc-list"></div>
+        </div>
+
+        <!-- फॉल डिटेक्शन -->
+        <div class="section-box alert-box">
+            <h3>⚠️ फॉल डिटेक्शन (गिरने का सेंसर)</h3>
+            <span id="fall-status" style="color: #27ae60; font-weight: bold;">सेंसर सक्रिय (Monitoring Active)</span>
+        </div>
+
+        <!-- मनोरंजन और भक्ति कॉर्नर -->
+        <div class="section-box">
+            <h3>🎧 मनोरंजन और भक्ति कॉर्नर</h3>
+            <select id="audio-select">
+                <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">🎶 शांतिदायक संगीत</option>
+                <option value="https://actions.google.com/sounds/v1/ambiences/morning_birds.ogg">🐦 सुबह की पक्षी चहक</option>
+            </select>
+            <button onclick="playAudio()" style="background-color: #8e44ad;">चलाएं (Play)</button>
+            <button onclick="stopAudio()" style="background-color: #c0392b;">बंद करें (Stop)</button>
+            <audio id="devotional-audio"></audio>
+        </div>
+
+        <!-- ब्रीदिंग एक्सरसाइज -->
+        <div class="section-box">
+            <h3>🧘 ब्रीदिंग एक्सरसाइज</h3>
+            <p id="breath-timer">शुरू करने के लिए बटन दबाएं</p>
+            <button onclick="startBreathing()" style="background-color: #16a085;">सांस लें (Start)</button>
+        </div>
+
+        <!-- डिजिटल वॉयस डायरी -->
+        <div class="section-box">
+            <h3>📖 डिजिटल वॉयस डायरी (यादें)</h3>
+            <button onclick="recordDiary()">🎙️ अपनी डायरी बोलकर रिकॉर्ड करें</button>
+            <p id="diary-output"></p>
+        </div>
+
+        <!-- फैमिली डैशबोर्ड -->
+        <div class="section-box">
+            <h3>👨‍👩‍👦 फैमिली डैशबोर्ड (बच्चों के लिए लाइव स्टेटस)</h3>
+            <ul>
+                <li>पानी पिया: <span id="dash-water">0</span> गिलास <button onclick="drinkWater()" style="padding:2px 5px;">+1 गिलास</button></li>
+                <li>दवा स्थिति: <span id="dash-med" style="color: #e74c3c;">बाकी है</span></li>
+                <li>सेहत की स्थिति: <span style="color: #27ae60;">सामान्य (Stable)</span></li>
+            </ul>
+            <button onclick="syncToFamilyCloud()" style="background-color: #8e44ad;">डेटा बच्चों के ऐप पर भेजें (Sync)</button>
+        </div>
+
+        <!-- कम्युनिटी वॉल -->
+        <div class="section-box">
+            <h3>💬 कम्युनिटी वॉल</h3>
+            <textarea id="post-input" placeholder="अपनी बात यहाँ लिखें..."></textarea>
+            <button onclick="addPost()">पोस्ट करें</button>
+            <div id="wall-posts"></div>
+        </div>
+
+        <!-- इमरजेंसी SOS -->
+        <div class="section-box alert-box">
+            <h3 style="color: #e74c3c;">🚨 इमरजेंसी SOS</h3>
+            <button onclick="triggerSOS()" style="background-color: #e74c3c; width: 100%;">SOS मदद मांगें</button>
+        </div>
+    </div>
+
+    <!-- Eruda Debugging -->
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
+    <script src="script.js"></script>
+</body>
+</html>
